@@ -3,9 +3,351 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Credit Approval System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #212529;
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+        .card {
+            margin-bottom: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .btn-primary {
+            background-color: #0d6efd;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        #response-container {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            display: none;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+    </style>
 </head>
 <body>
-    
+    <div class="header text-center">
+        <h1>Credit Approval System</h1>
+        <p class="lead">Manage customer registration and loan applications</p>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3>API Endpoints</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Register Customer
+                                <span class="badge bg-primary rounded-pill">POST /api/register/</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Check Eligibility
+                                <span class="badge bg-primary rounded-pill">POST /api/check-eligibility/</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Create Loan
+                                <span class="badge bg-primary rounded-pill">POST /api/create-loan/</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                View Loan
+                                <span class="badge bg-primary rounded-pill">GET /api/view-loan/{loan_id}/</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                View Customer Loans
+                                <span class="badge bg-primary rounded-pill">GET /api/view-loans/{customer_id}/</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-8">
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="true">Register Customer</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="eligibility-tab" data-bs-toggle="tab" data-bs-target="#eligibility" type="button" role="tab" aria-controls="eligibility" aria-selected="false">Check Eligibility</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="create-loan-tab" data-bs-toggle="tab" data-bs-target="#create-loan" type="button" role="tab" aria-controls="create-loan" aria-selected="false">Create Loan</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="view-loan-tab" data-bs-toggle="tab" data-bs-target="#view-loan" type="button" role="tab" aria-controls="view-loan" aria-selected="false">View Loan</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="view-loans-tab" data-bs-toggle="tab" data-bs-target="#view-loans" type="button" role="tab" aria-controls="view-loans" aria-selected="false">View Customer Loans</button>
+                    </li>
+                </ul>
+                
+                <div class="tab-content p-3 form-container" id="myTabContent">
+                    <!-- Register Customer Form -->
+                    <div class="tab-pane fade show active" id="register" role="tabpanel" aria-labelledby="register-tab">
+                        <h3>Register a New Customer</h3>
+                        <form id="register-form">
+                            <div class="mb-3">
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="age" class="form-label">Age</label>
+                                <input type="number" class="form-control" id="age" min="18" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="monthly_income" class="form-label">Monthly Income</label>
+                                <input type="number" class="form-control" id="monthly_income" min="0" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone_number" class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="phone_number" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Register</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Check Eligibility Form -->
+                    <div class="tab-pane fade" id="eligibility" role="tabpanel" aria-labelledby="eligibility-tab">
+                        <h3>Check Loan Eligibility</h3>
+                        <form id="eligibility-form">
+                            <div class="mb-3">
+                                <label for="customer_id_eligibility" class="form-label">Customer ID</label>
+                                <input type="number" class="form-control" id="customer_id_eligibility" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="loan_amount_eligibility" class="form-label">Loan Amount</label>
+                                <input type="number" class="form-control" id="loan_amount_eligibility" min="1000" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="interest_rate_eligibility" class="form-label">Interest Rate (%)</label>
+                                <input type="number" class="form-control" id="interest_rate_eligibility" min="1" step="0.01" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tenure_eligibility" class="form-label">Tenure (months)</label>
+                                <input type="number" class="form-control" id="tenure_eligibility" min="1" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Check Eligibility</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Create Loan Form -->
+                    <div class="tab-pane fade" id="create-loan" role="tabpanel" aria-labelledby="create-loan-tab">
+                        <h3>Create a New Loan</h3>
+                        <form id="create-loan-form">
+                            <div class="mb-3">
+                                <label for="customer_id_loan" class="form-label">Customer ID</label>
+                                <input type="number" class="form-control" id="customer_id_loan" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="loan_amount" class="form-label">Loan Amount</label>
+                                <input type="number" class="form-control" id="loan_amount" min="1000" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="interest_rate" class="form-label">Interest Rate (%)</label>
+                                <input type="number" class="form-control" id="interest_rate" min="1" step="0.01" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="tenure" class="form-label">Tenure (months)</label>
+                                <input type="number" class="form-control" id="tenure" min="1" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Create Loan</button>
+                        </form>
+                    </div>
+                    
+                    <!-- View Loan Form -->
+                    <div class="tab-pane fade" id="view-loan" role="tabpanel" aria-labelledby="view-loan-tab">
+                        <h3>View Loan Details</h3>
+                        <form id="view-loan-form">
+                            <div class="mb-3">
+                                <label for="loan_id" class="form-label">Loan ID</label>
+                                <input type="number" class="form-control" id="loan_id" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">View Loan</button>
+                        </form>
+                    </div>
+                    
+                    <!-- View Customer Loans Form -->
+                    <div class="tab-pane fade" id="view-loans" role="tabpanel" aria-labelledby="view-loans-tab">
+                        <h3>View Customer Loans</h3>
+                        <form id="view-loans-form">
+                            <div class="mb-3">
+                                <label for="customer_id_view" class="form-label">Customer ID</label>
+                                <input type="number" class="form-control" id="customer_id_view" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">View Loans</button>
+                        </form>
+                    </div>
+                    
+                    <!-- Response Container -->
+                    <div id="response-container" class="mt-4">
+                        <h4>Response:</h4>
+                        <pre id="response-data"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Base URL for API requests
+        const API_BASE_URL = '/api';
+        
+        // Register form submission
+        document.getElementById('register-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const data = {
+                first_name: document.getElementById('first_name').value,
+                last_name: document.getElementById('last_name').value,
+                age: parseInt(document.getElementById('age').value),
+                monthly_salary: parseFloat(document.getElementById('monthly_income').value),
+                phone_number: document.getElementById('phone_number').value
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/register/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                showResponse(result, response.ok);
+            } catch (error) {
+                showResponse({ error: error.message }, false);
+            }
+        });
+        
+        // Eligibility form submission
+        document.getElementById('eligibility-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const data = {
+                customer_id: parseInt(document.getElementById('customer_id_eligibility').value),
+                loan_amount: parseFloat(document.getElementById('loan_amount_eligibility').value),
+                interest_rate: parseFloat(document.getElementById('interest_rate_eligibility').value),
+                tenure: parseInt(document.getElementById('tenure_eligibility').value)
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/check-eligibility/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                showResponse(result, response.ok);
+            } catch (error) {
+                showResponse({ error: error.message }, false);
+            }
+        });
+        
+        // Create Loan form submission
+        document.getElementById('create-loan-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const data = {
+                customer_id: parseInt(document.getElementById('customer_id_loan').value),
+                loan_amount: parseFloat(document.getElementById('loan_amount').value),
+                interest_rate: parseFloat(document.getElementById('interest_rate').value),
+                tenure: parseInt(document.getElementById('tenure').value)
+            };
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/create-loan/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                showResponse(result, response.ok);
+            } catch (error) {
+                showResponse({ error: error.message }, false);
+            }
+        });
+        
+        // View Loan form submission
+        document.getElementById('view-loan-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const loanId = document.getElementById('loan_id').value;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/view-loan/${loanId}/`, {
+                    method: 'GET'
+                });
+                
+                const result = await response.json();
+                showResponse(result, response.ok);
+            } catch (error) {
+                showResponse({ error: error.message }, false);
+            }
+        });
+        
+        // View Customer Loans form submission
+        document.getElementById('view-loans-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const customerId = document.getElementById('customer_id_view').value;
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/view-loans/${customerId}/`, {
+                    method: 'GET'
+                });
+                
+                const result = await response.json();
+                showResponse(result, response.ok);
+            } catch (error) {
+                showResponse({ error: error.message }, false);
+            }
+        });
+        
+        // Function to display API response
+        function showResponse(data, isSuccess) {
+            const responseContainer = document.getElementById('response-container');
+            const responseData = document.getElementById('response-data');
+            
+            responseContainer.style.display = 'block';
+            responseContainer.className = isSuccess ? 'success' : 'error';
+            responseData.textContent = JSON.stringify(data, null, 2);
+        }
+    </script>
 </body>
 </html>
