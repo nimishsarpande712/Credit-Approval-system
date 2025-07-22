@@ -237,13 +237,26 @@
                 const response = await fetch(`${API_BASE_URL}/register/`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify(data)
                 });
                 
                 const result = await response.json();
-                showResponse(result, response.ok);
+                if (!response.ok) {
+                    if (result.error && typeof result.error === 'object') {
+                        // Format validation errors nicely
+                        const errorMessages = Object.entries(result.error)
+                            .map(([field, msg]) => `${field}: ${msg}`)
+                            .join('\n');
+                        showResponse({ error: errorMessages }, false);
+                    } else {
+                        showResponse({ error: result.error || `Server error: ${response.status}` }, false);
+                    }
+                    return;
+                }
+                showResponse(result, true);
             } catch (error) {
                 showResponse({ error: error.message }, false);
             }
@@ -306,13 +319,28 @@
                 const response = await fetch(`${API_BASE_URL}/create-loan/`, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify(data),
+                    credentials: 'same-origin'
                 });
                 
+                if (!response.ok) {
+                    let errorMsg = `Server error: ${response.status}`;
+                    try {
+                        const errorJson = await response.json();
+                        if (errorJson.error) errorMsg = errorJson.error;
+                    } catch (e) {
+                        const errorText = await response.text();
+                        errorMsg = `Failed to parse response: ${errorText.substring(0, 100)}...`;
+                    }
+                    showResponse({ error: errorMsg }, false);
+                    return;
+                }
+                
                 const result = await response.json();
-                showResponse(result, response.ok);
+                showResponse(result, true);
             } catch (error) {
                 showResponse({ error: error.message }, false);
             }
@@ -326,11 +354,28 @@
             
             try {
                 const response = await fetch(`${API_BASE_URL}/view-loan/${loanId}/`, {
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin'
                 });
                 
+                if (!response.ok) {
+                    let errorMsg = `Server error: ${response.status}`;
+                    try {
+                        const errorJson = await response.json();
+                        if (errorJson.error) errorMsg = errorJson.error;
+                    } catch (e) {
+                        const errorText = await response.text();
+                        errorMsg = `Failed to parse response: ${errorText.substring(0, 100)}...`;
+                    }
+                    showResponse({ error: errorMsg }, false);
+                    return;
+                }
+                
                 const result = await response.json();
-                showResponse(result, response.ok);
+                showResponse(result, true);
             } catch (error) {
                 showResponse({ error: error.message }, false);
             }
@@ -344,11 +389,28 @@
             
             try {
                 const response = await fetch(`${API_BASE_URL}/view-loans/${customerId}/`, {
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'same-origin'
                 });
                 
+                if (!response.ok) {
+                    let errorMsg = `Server error: ${response.status}`;
+                    try {
+                        const errorJson = await response.json();
+                        if (errorJson.error) errorMsg = errorJson.error;
+                    } catch (e) {
+                        const errorText = await response.text();
+                        errorMsg = `Failed to parse response: ${errorText.substring(0, 100)}...`;
+                    }
+                    showResponse({ error: errorMsg }, false);
+                    return;
+                }
+                
                 const result = await response.json();
-                showResponse(result, response.ok);
+                showResponse(result, true);
             } catch (error) {
                 showResponse({ error: error.message }, false);
             }

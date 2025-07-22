@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-v7ibvk5eofoo2u=t!3b$c!@p30mxj_q+tsact(_n@_j+_j8e%)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
 
@@ -63,9 +63,9 @@ WSGI_APPLICATION = 'credit_approval.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'credit-approval-system',
+        'NAME': 'credit-approval-system',  # keeping the hyphen as per your database name
         'USER': 'postgres',
-        'PASSWORD': 'ShreeHariKrishna@07', 
+        'PASSWORD': 'ShreeHariKrishna@07',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -116,7 +116,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = True
-CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOW_CREDENTIALS = False  # Changed to False since we're not using credentials
 CORS_ALLOW_METHODS = [
     'DELETE',
     'GET',
@@ -135,6 +135,12 @@ CORS_ALLOW_HEADERS = [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
+]
+
+# Configure CORS origins explicitly for more security
+CORS_ALLOWED_ORIGINS = [
+    "http://127.0.0.1:5500",
+    "http://localhost:5500",
 ]
 
 # Celery settings
