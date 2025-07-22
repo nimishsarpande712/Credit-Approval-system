@@ -100,7 +100,8 @@ def create_loan(request):
             )
             
             # Update customer's current debt
-            customer.current_debt += float(loan_amount)
+            from decimal import Decimal
+            customer.current_debt += Decimal(str(loan_amount))
             customer.save()
             
             response_data = {

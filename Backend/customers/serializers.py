@@ -12,7 +12,12 @@ class CustomerRegistrationSerializer(serializers.ModelSerializer):
         fields = ('first_name', 'last_name', 'age', 'monthly_salary', 'phone_number')
     
     def create(self, validated_data):
+        # Get the max customer_id and increment by 1
+        max_id = Customer.objects.order_by('-customer_id').first()
+        next_id = (max_id.customer_id + 1) if max_id else 1
+        
         customer = Customer(
+            customer_id=next_id,
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],
             age=validated_data['age'],
