@@ -77,6 +77,80 @@ customer_data.xlsx
 loan_data.xlsx
 
 These are auto-ingested in the background via Celery after container boot. 💾
+🧑‍💻 OPTION 2: Manual Developer Setup
+For development, testing, or debugging without Docker.
+
+✅ 1. Clone and Setup Virtual Environment
+bash
+Copy
+Edit
+git clone https://github.com/your-username/credit-approval-system.git
+cd credit-approval-system
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate         # On Windows: venv\Scripts\activate
+
+# Install dependencies
+pip install -r requirements.txt
+🗃️ 2. Setup PostgreSQL Locally
+Create a PostgreSQL DB and update settings.py:
+
+python
+Copy
+Edit
+DATABASES = {
+  'default': {
+    'ENGINE': 'django.db.backends.postgresql',
+    'NAME': 'creditdb',
+    'USER': 'credituser',
+    'PASSWORD': 'yourpassword',
+    'HOST': 'localhost',
+    'PORT': '5432',
+  }
+}
+🔁 3. Run Migrations
+bash
+Copy
+Edit
+python manage.py makemigrations
+python manage.py migrate
+🧙‍♂️ 4. Create Superuser (Optional for admin panel)
+bash
+Copy
+Edit
+python manage.py createsuperuser
+🧵 5. Start Redis (for Celery)
+Make sure Redis is installed and running:
+
+bash
+Copy
+Edit
+redis-server
+🧠 6. Start Celery Worker (in a new terminal tab)
+bash
+Copy
+Edit
+celery -A backend worker --loglevel=info
+This will auto-ingest:
+
+data/customer_data.xlsx
+
+data/loan_data.xlsx
+
+into your database 🎯
+
+🌐 7. Start Django Server
+bash
+Copy
+Edit
+python manage.py runserver
+Your API is live at:
+
+bash
+Copy
+Edit
+http://127.0.0.1:8000/
 
 📡 API Endpoints
 All endpoints follow RESTful design and return JSON.
