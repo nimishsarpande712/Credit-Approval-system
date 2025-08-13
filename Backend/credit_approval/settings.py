@@ -63,15 +63,19 @@ WSGI_APPLICATION = 'credit_approval.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'credit-approval-system',  # keeping the hyphen as per your database name
-        'USER': 'postgres',
-        'PASSWORD': 'ShreeHariKrishna@07',
-        'HOST': 'localhost',
+        'NAME': 'creditapprovalsystem',
+        'USER': 'postgre',
+        'PASSWORD': 'Cm1O0LiW6YpDxwcWZV3BvVRdhpHgLzDW',
+        'HOST': 'dpg-d2dkbsggjchc73drs580-a.singapore-postgres.render.com',
         'PORT': '5432',
+        'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
 
-# Password validation
+
+# password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -108,6 +112,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+TEMPLATES[0]['DIRS'] = [BASE_DIR / "Frontend"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field

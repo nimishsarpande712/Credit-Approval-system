@@ -1,5 +1,15 @@
 from django.urls import path
 from . import views
+from django.shortcuts import render
+from django.urls import path
+
+def home(request):
+    return render(request, 'index.html')
+
+urlpatterns = [
+    path('', home),
+]
+
 
 urlpatterns = [
     path('check-eligibility/', views.check_eligibility, name='check-eligibility'),
