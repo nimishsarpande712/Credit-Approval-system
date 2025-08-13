@@ -1,4 +1,5 @@
 FROM python:3.9-slim
+RUN apt-get update && apt-get install -y netcat
 
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
