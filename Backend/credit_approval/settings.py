@@ -60,19 +60,15 @@ WSGI_APPLICATION = 'credit_approval.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+import dj_database_url
+import os
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'DB_NAME': 'creditapprovalsystem',
-        'DB_USER': 'postgre',
-        'DB_PASSWORD': 'Cm1O0LiW6YpDxwcWZV3BvVRdhpHgLzDW',
-        'DB_HOST': 'dpg-d2dkbsggjchc73drs580-a.singapore-postgres.render.com',
-        'DB_PORT': '5432',
-        'OPTIONS': {
-            'sslmode': 'require',
-        },
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('postgresql://postgre:Cm1O0LiW6YpDxwcWZV3BvVRdhpHgLzDW@dpg-d2dkbsggjchc73drs580-a/creditapprovalsystem')
+    )
 }
+
 
 
 # password validation
