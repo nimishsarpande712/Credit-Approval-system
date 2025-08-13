@@ -150,7 +150,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5000",
     "http://localhost:5000",
     "http://127.0.0.1:55000",
-    "http://localhost:55000"
+    "http://localhost:55000",
+    # Removed trailing slash to satisfy django-cors-headers validation (no path component allowed)
+    "https://credit-approval-system-hooo.onrender.com"
 ]
 
 # Celery settings
