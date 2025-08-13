@@ -63,11 +63,11 @@ WSGI_APPLICATION = 'credit_approval.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'creditapprovalsystem',
-        'USER': 'postgre',
-        'PASSWORD': 'Cm1O0LiW6YpDxwcWZV3BvVRdhpHgLzDW',
-        'HOST': 'dpg-d2dkbsggjchc73drs580-a.singapore-postgres.render.com',
-        'PORT': '5432',
+        'DB_NAME': 'creditapprovalsystem',
+        'DB_USER': 'postgre',
+        'DB_PASSWORD': 'Cm1O0LiW6YpDxwcWZV3BvVRdhpHgLzDW',
+        'DB_HOST': 'dpg-d2dkbsggjchc73drs580-a.singapore-postgres.render.com',
+        'DB_PORT': '5432',
         'OPTIONS': {
             'sslmode': 'require',
         },
